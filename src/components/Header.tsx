@@ -56,32 +56,49 @@ export function Header() {
     };
   }, [open]);
 
-  const wholesaleAction = wholesale ? (
-    <div className="flex flex-col items-end leading-tight lg:flex-row lg:items-center lg:gap-2">
+  const wholesaleLoginHref = `${localePrefix}/wholesale/login`;
+
+  const wholesaleMobileClass =
+    'flex shrink-0 items-center gap-1 rounded-full bg-brand-700 px-2.5 py-1.5 text-xs font-semibold text-white shadow-soft';
+
+  const wholesaleMobile = wholesale ? (
+    <div className={wholesaleMobileClass} title={t('home.wholesaleBadgeActive')}>
+      <Crown className="h-4 w-4 shrink-0" />
+      <span className="whitespace-nowrap">{t('home.wholesaleBadge')}</span>
+    </div>
+  ) : (
+    <Link href={wholesaleLoginHref} className={wholesaleMobileClass}>
+      <Crown className="h-4 w-4 shrink-0" />
+      <span className="whitespace-nowrap">{t('home.wholesaleBadge')}</span>
+    </Link>
+  );
+
+  const wholesaleDesktop = wholesale ? (
+    <div className="flex items-center gap-2 leading-tight">
       <div className="flex items-center gap-1 rounded-xl bg-brand-700 px-3 py-1.5 text-white">
         <Crown className="h-4 w-4" />
         <div className="text-xs font-semibold">{t('home.wholesaleBadge')}</div>
       </div>
-      <span className="mt-0.5 text-[10px] text-brand-700/80 lg:hidden">
+      <span className="text-xs text-brand-700/80">
         {t('home.wholesaleBadgeActive')}
       </span>
       <button
         onClick={logoutWholesale}
-        className="text-[10px] text-brand-600 underline lg:text-xs"
+        className="text-xs text-brand-600 underline"
       >
         {t('home.wholesaleLogout')}
       </button>
     </div>
   ) : (
     <Link
-      href={`${localePrefix}/wholesale/login`}
-      className="rounded-xl bg-brand-700 px-3 py-2 text-xs font-semibold leading-tight text-white shadow-soft lg:px-4 lg:py-2.5"
+      href={wholesaleLoginHref}
+      className="rounded-xl bg-brand-700 px-4 py-2.5 text-xs font-semibold leading-tight text-white shadow-soft"
     >
       <div className="flex items-center gap-1">
         <Crown className="h-4 w-4" />
         <span>{t('home.wholesaleBadge')}</span>
       </div>
-      <span className="mt-0.5 block text-[10px] font-normal text-white/80 lg:hidden">
+      <span className="mt-0.5 block text-[10px] font-normal text-white/80">
         {t('home.wholesaleBadgeSub')}
       </span>
     </Link>
@@ -91,23 +108,23 @@ export function Header() {
     <>
       <header className="sticky top-0 z-30 border-b border-brand-100 bg-white/90 backdrop-blur">
         <div className="container-app py-3 lg:py-4">
-          {/* Mobile: menu | centered logo | wholesale */}
-          <div className="relative flex items-center justify-between lg:hidden">
+          {/* Mobile: menu | logo (left) | wholesale */}
+          <div className="flex min-w-0 items-center gap-2 lg:hidden">
             <button
               type="button"
               aria-label="Menu"
               onClick={() => setOpen(true)}
-              className="rounded-full p-2 text-brand-700 hover:bg-brand-50"
+              className="-ml-1 shrink-0 rounded-full p-2 text-brand-700 hover:bg-brand-50"
             >
               <Menu className="h-5 w-5" />
             </button>
             <Link
               href={`${localePrefix}/`}
-              className="absolute left-1/2 -translate-x-1/2"
+              className="min-w-0 flex-1 overflow-hidden"
             >
-              <Logo />
+              <Logo className="h-8 max-h-8 w-auto max-w-full origin-left" />
             </Link>
-            {wholesaleAction}
+            {wholesaleMobile}
           </div>
 
           {/* Desktop: logo + nav | language + wholesale */}
@@ -138,7 +155,7 @@ export function Header() {
             </div>
             <div className="flex shrink-0 items-center gap-3">
               <LanguageSwitcher />
-              {wholesaleAction}
+              {wholesaleDesktop}
             </div>
           </div>
         </div>
