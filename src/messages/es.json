@@ -1,0 +1,171 @@
+{
+  "brand": {
+    "name": "Vivero Chiriquí",
+    "tagline": "Plantas y jardín"
+  },
+  "nav": {
+    "home": "Inicio",
+    "categories": "Categorías",
+    "list": "Mi lista",
+    "contact": "Contacto",
+    "wholesale": "Mayoristas",
+    "admin": "Admin"
+  },
+  "home": {
+    "heroTitle": "Plantas que llenan tu vida de naturaleza",
+    "heroSubtitle": "Gran variedad de plantas, macetas y accesorios para tu hogar y jardín.",
+    "heroCta": "Ver catálogo completo",
+    "wholesaleBadge": "Mayoristas",
+    "wholesaleBadgeSub": "Ver precios y ventajas especiales",
+    "wholesaleBadgeActive": "Precios especiales activos",
+    "wholesaleLogout": "Cerrar sesión",
+    "searchPlaceholder": "Buscar plantas, macetas y más...",
+    "featuredTitle": "Productos destacados",
+    "wholesaleTitle": "Productos para mayoristas",
+    "wholesaleSubtitle": "Precios especiales por volumen",
+    "viewAll": "Ver todos",
+    "perks": {
+      "delivery": {
+        "title": "Entrega rápida",
+        "desc": "En toda la ciudad"
+      },
+      "healthy": {
+        "title": "Plantas saludables",
+        "desc": "Seleccionamos lo mejor para ti"
+      },
+      "advice": {
+        "title": "Asesoría personalizada",
+        "desc": "Te ayudamos a elegir"
+      },
+      "fairPrice": {
+        "title": "Precios justos",
+        "desc": "Calidad que se adapta a ti"
+      }
+    },
+    "helpTitle": "¿Necesitas ayuda o hacer tu pedido?",
+    "helpDesc": "Escríbenos por WhatsApp, estamos listos para asesorarte.",
+    "helpCta": "Contactar por WhatsApp",
+    "wholesaleCatalog": "Catálogo Mayorista",
+    "wholesaleCatalogSub": "Precios especiales para revendedores",
+    "minimumNote": "Compra mínima: $100.00 ó 10 unidades por producto",
+    "promoCta": "Ver promociones mayoristas",
+    "shippingTitle": "Envíos especiales para mayoristas",
+    "shippingDesc": "Envíos a todo el país. Consulta condiciones y tarifas.",
+    "moreInfo": "Más información"
+  },
+  "product": {
+    "stock": {
+      "in_stock": "Disponible",
+      "low_stock": "Pocas unidades",
+      "out_of_stock": "Agotado"
+    },
+    "addToList": "Agregar a lista",
+    "add": "Agregar",
+    "wholesalePrice": "Precio mayorista",
+    "from": "Desde {n} unidades",
+    "viewDetails": "Ver detalles",
+    "share": "Compartir",
+    "noResults": "No se encontraron productos",
+    "all": "Todas",
+    "filters": "Filtros",
+    "sort": {
+      "label": "Ordenar",
+      "newest": "Más recientes",
+      "price_asc": "Precio: menor a mayor",
+      "price_desc": "Precio: mayor a menor",
+      "name": "Nombre A-Z"
+    }
+  },
+  "list": {
+    "title": "Mi lista de pedido",
+    "empty": "Tu lista está vacía",
+    "emptyDesc": "Agrega productos del catálogo para crear tu cotización.",
+    "browse": "Ver catálogo",
+    "items": "{n, plural, =0 {Sin productos} one {# producto} other {# productos}}",
+    "subtotal": "Total estimado",
+    "send": "Enviar pedido por WhatsApp",
+    "clear": "Vaciar lista",
+    "remove": "Eliminar",
+    "minQty": "Mín. {n}",
+    "noteLabel": "Notas adicionales (opcional)",
+    "notePlaceholder": "Ej: Entrega el sábado, color preferido, etc.",
+    "wholesaleMode": "Modo mayorista activo"
+  },
+  "wholesale": {
+    "title": "Acceso Mayorista",
+    "desc": "Ingresa la contraseña proporcionada por Vivero Chiriquí para ver precios especiales.",
+    "passwordLabel": "Contraseña",
+    "submit": "Ingresar",
+    "back": "Volver al catálogo",
+    "invalid": "Contraseña incorrecta. Intenta nuevamente.",
+    "active": "Modo mayorista activo",
+    "logout": "Salir del modo mayorista"
+  },
+  "admin": {
+    "loginTitle": "Panel de Administración",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "submit": "Ingresar",
+    "invalid": "Credenciales inválidas",
+    "dashboard": "Panel",
+    "products": "Productos",
+    "categories": "Categorías",
+    "logout": "Cerrar sesión",
+    "newProduct": "Nuevo producto",
+    "editProduct": "Editar producto",
+    "save": "Guardar",
+    "saving": "Guardando...",
+    "delete": "Eliminar",
+    "confirmDelete": "¿Eliminar este elemento?",
+    "fields": {
+      "name_es": "Nombre (Español)",
+      "name_en": "Nombre (Inglés)",
+      "description_es": "Descripción (Español)",
+      "description_en": "Descripción (Inglés)",
+      "category": "Categoría",
+      "retail_price": "Precio retail",
+      "wholesale_price": "Precio mayorista",
+      "pot_size": "Tamaño / Maceta",
+      "stock_status": "Disponibilidad",
+      "promotion_text": "Etiqueta promocional",
+      "is_active": "Activo",
+      "is_featured": "Destacado",
+      "images": "Imágenes",
+      "uploadImages": "Subir imágenes / video",
+      "primary": "Principal"
+    },
+    "stats": {
+      "products": "Productos",
+      "categories": "Categorías",
+      "active": "Activos",
+      "outOfStock": "Sin stock"
+    },
+    "noProducts": "No hay productos aún",
+    "createFirst": "Crear el primero",
+    "noCategory": "Sin categoría",
+    "newCategory": "Nueva categoría",
+    "editCategory": "Editar categoría",
+    "categoryFields": {
+      "slug": "Identificador (slug)",
+      "name_es": "Nombre (Español)",
+      "name_en": "Nombre (Inglés)",
+      "icon": "Ícono",
+      "sort_order": "Orden",
+      "is_active": "Activa"
+    }
+  },
+  "common": {
+    "loading": "Cargando...",
+    "search": "Buscar",
+    "cancel": "Cancelar",
+    "close": "Cerrar",
+    "language": "Idioma",
+    "yes": "Sí",
+    "no": "No",
+    "back": "Volver"
+  },
+  "footer": {
+    "rights": "Todos los derechos reservados.",
+    "legal": "Catálogo digital. Las cotizaciones se gestionan vía WhatsApp."
+  }
+}

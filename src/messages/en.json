@@ -1,0 +1,171 @@
+{
+  "brand": {
+    "name": "Vivero Chiriquí",
+    "tagline": "Plants & Garden"
+  },
+  "nav": {
+    "home": "Home",
+    "categories": "Categories",
+    "list": "My list",
+    "contact": "Contact",
+    "wholesale": "Wholesale",
+    "admin": "Admin"
+  },
+  "home": {
+    "heroTitle": "Plants that fill your life with nature",
+    "heroSubtitle": "A wide variety of plants, pots, and accessories for your home and garden.",
+    "heroCta": "Browse full catalog",
+    "wholesaleBadge": "Wholesale",
+    "wholesaleBadgeSub": "See prices and special perks",
+    "wholesaleBadgeActive": "Special pricing active",
+    "wholesaleLogout": "Log out",
+    "searchPlaceholder": "Search plants, pots, and more...",
+    "featuredTitle": "Featured products",
+    "wholesaleTitle": "Wholesale products",
+    "wholesaleSubtitle": "Special prices by volume",
+    "viewAll": "View all",
+    "perks": {
+      "delivery": {
+        "title": "Fast delivery",
+        "desc": "Across the city"
+      },
+      "healthy": {
+        "title": "Healthy plants",
+        "desc": "We pick the best for you"
+      },
+      "advice": {
+        "title": "Personalized advice",
+        "desc": "We help you choose"
+      },
+      "fairPrice": {
+        "title": "Fair pricing",
+        "desc": "Quality that fits you"
+      }
+    },
+    "helpTitle": "Need help or want to place an order?",
+    "helpDesc": "Message us on WhatsApp — we're ready to assist.",
+    "helpCta": "Contact via WhatsApp",
+    "wholesaleCatalog": "Wholesale Catalog",
+    "wholesaleCatalogSub": "Special pricing for resellers",
+    "minimumNote": "Minimum order: $100.00 or 10 units per product",
+    "promoCta": "View wholesale promotions",
+    "shippingTitle": "Special shipping for wholesalers",
+    "shippingDesc": "Nationwide delivery. Ask about terms and rates.",
+    "moreInfo": "More info"
+  },
+  "product": {
+    "stock": {
+      "in_stock": "In stock",
+      "low_stock": "Low stock",
+      "out_of_stock": "Out of stock"
+    },
+    "addToList": "Add to list",
+    "add": "Add",
+    "wholesalePrice": "Wholesale price",
+    "from": "From {n} units",
+    "viewDetails": "View details",
+    "share": "Share",
+    "noResults": "No products found",
+    "all": "All",
+    "filters": "Filters",
+    "sort": {
+      "label": "Sort",
+      "newest": "Newest first",
+      "price_asc": "Price: low to high",
+      "price_desc": "Price: high to low",
+      "name": "Name A-Z"
+    }
+  },
+  "list": {
+    "title": "My request list",
+    "empty": "Your list is empty",
+    "emptyDesc": "Add products from the catalog to build your quote.",
+    "browse": "Browse catalog",
+    "items": "{n, plural, =0 {No items} one {# item} other {# items}}",
+    "subtotal": "Estimated total",
+    "send": "Send order via WhatsApp",
+    "clear": "Clear list",
+    "remove": "Remove",
+    "minQty": "Min. {n}",
+    "noteLabel": "Additional notes (optional)",
+    "notePlaceholder": "E.g.: Saturday delivery, preferred color, etc.",
+    "wholesaleMode": "Wholesale mode active"
+  },
+  "wholesale": {
+    "title": "Wholesale Access",
+    "desc": "Enter the password provided by Vivero Chiriquí to view special pricing.",
+    "passwordLabel": "Password",
+    "submit": "Enter",
+    "back": "Back to catalog",
+    "invalid": "Invalid password. Try again.",
+    "active": "Wholesale mode active",
+    "logout": "Exit wholesale mode"
+  },
+  "admin": {
+    "loginTitle": "Admin Panel",
+    "email": "Email",
+    "password": "Password",
+    "submit": "Sign in",
+    "invalid": "Invalid credentials",
+    "dashboard": "Dashboard",
+    "products": "Products",
+    "categories": "Categories",
+    "logout": "Log out",
+    "newProduct": "New product",
+    "editProduct": "Edit product",
+    "save": "Save",
+    "saving": "Saving...",
+    "delete": "Delete",
+    "confirmDelete": "Delete this item?",
+    "fields": {
+      "name_es": "Name (Spanish)",
+      "name_en": "Name (English)",
+      "description_es": "Description (Spanish)",
+      "description_en": "Description (English)",
+      "category": "Category",
+      "retail_price": "Retail price",
+      "wholesale_price": "Wholesale price",
+      "pot_size": "Size / Pot",
+      "stock_status": "Availability",
+      "promotion_text": "Promotion label",
+      "is_active": "Active",
+      "is_featured": "Featured",
+      "images": "Images",
+      "uploadImages": "Upload images / video",
+      "primary": "Primary"
+    },
+    "stats": {
+      "products": "Products",
+      "categories": "Categories",
+      "active": "Active",
+      "outOfStock": "Out of stock"
+    },
+    "noProducts": "No products yet",
+    "createFirst": "Create the first one",
+    "noCategory": "No category",
+    "newCategory": "New category",
+    "editCategory": "Edit category",
+    "categoryFields": {
+      "slug": "Identifier (slug)",
+      "name_es": "Name (Spanish)",
+      "name_en": "Name (English)",
+      "icon": "Icon",
+      "sort_order": "Order",
+      "is_active": "Active"
+    }
+  },
+  "common": {
+    "loading": "Loading...",
+    "search": "Search",
+    "cancel": "Cancel",
+    "close": "Close",
+    "language": "Language",
+    "yes": "Yes",
+    "no": "No",
+    "back": "Back"
+  },
+  "footer": {
+    "rights": "All rights reserved.",
+    "legal": "Digital catalog. Quotes are managed via WhatsApp."
+  }
+}

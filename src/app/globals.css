@@ -1,0 +1,53 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-sans: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --font-display: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background: #fafdf8;
+  color: #143a14;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@layer components {
+  .container-app {
+    @apply mx-auto w-full max-w-screen-md px-4;
+  }
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-full px-4 py-2 text-sm font-semibold transition active:scale-[0.98];
+  }
+  .btn-primary {
+    @apply btn bg-brand-600 text-white hover:bg-brand-700 disabled:opacity-50;
+  }
+  .btn-outline {
+    @apply btn border border-brand-200 bg-white text-brand-700 hover:bg-brand-50;
+  }
+  .btn-whatsapp {
+    @apply btn bg-whatsapp text-white hover:bg-whatsapp-dark;
+  }
+  .card {
+    @apply rounded-2xl bg-white shadow-card;
+  }
+  .chip {
+    @apply inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-medium;
+  }
+}
+
+/* Hide scroll bar on horizontal category list while keeping it scrollable */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
