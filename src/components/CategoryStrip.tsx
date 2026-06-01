@@ -2,34 +2,10 @@
 
 import Link from 'next/link';
 import { useLocale } from 'next-intl';
-import {
-  Apple,
-  Cherry,
-  Flower2,
-  Leaf,
-  PackageOpen,
-  Sprout,
-  Sun,
-  Tag,
-  TreeDeciduous,
-  TreePine,
-} from 'lucide-react';
+import { Leaf } from 'lucide-react';
+import { getCategoryIcon } from '@/lib/category-icons';
 import { cn } from '@/lib/format';
 import type { Category } from '@/lib/types';
-
-const ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
-  flower: Flower2,
-  leaf: Leaf,
-  sun: Sun,
-  tree: TreeDeciduous,
-  pine: TreePine,
-  apple: Apple,
-  succulent: Sprout,
-  cactus: Cherry,
-  pot: PackageOpen,
-  soil: PackageOpen,
-  tag: Tag,
-};
 
 interface Props {
   categories: Category[];
@@ -43,7 +19,7 @@ export function CategoryStrip({ categories, activeSlug }: Props) {
   return (
     <div className="no-scrollbar -mx-4 flex gap-3 overflow-x-auto px-4 pb-1 pt-2 lg:mx-0 lg:flex-wrap lg:justify-start lg:gap-4 lg:overflow-visible lg:px-0">
       {categories.map((c) => {
-        const Icon = (c.icon && ICONS[c.icon]) || Leaf;
+        const Icon = getCategoryIcon(c.icon);
         const label = locale === 'es' ? c.name_es : c.name_en;
         const active = activeSlug === c.slug;
         return (
@@ -94,7 +70,7 @@ export function CategorySidebar({ categories, activeSlug }: Props) {
         {locale === 'es' ? 'Todas' : 'All'}
       </Link>
       {categories.map((c) => {
-        const Icon = (c.icon && ICONS[c.icon]) || Leaf;
+        const Icon = getCategoryIcon(c.icon);
         const label = locale === 'es' ? c.name_es : c.name_en;
         const active = activeSlug === c.slug;
         return (

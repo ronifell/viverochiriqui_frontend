@@ -4,6 +4,7 @@ import { useLocale, useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 import { Plus, Trash2 } from 'lucide-react';
 import { AdminShell } from '@/components/admin/AdminShell';
+import { CategoryIcon } from '@/lib/category-icons';
 import { api, ApiError } from '@/lib/api';
 import { useAuth } from '@/lib/auth-store';
 import type { Category } from '@/lib/types';
@@ -90,6 +91,9 @@ export function AdminCategoriesView() {
               !c.is_active && 'opacity-60'
             )}
           >
+            <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl border border-brand-100 bg-brand-50">
+              <CategoryIcon icon={c.icon} className="h-5 w-5 text-brand-700" />
+            </span>
             <button
               onClick={() => {
                 setEditing(c);
