@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useLocale, useTranslations } from 'next-intl';
 import { usePathname } from 'next/navigation';
 import { Crown, LogOut, Menu, X } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useAuth } from '@/lib/auth-store';
 import { cn } from '@/lib/format';
 import { Logo } from './Logo';
@@ -27,84 +27,112 @@ export function Header() {
     { href: `${localePrefix}/contact`, label: t('nav.contact'), match: (p: string) => p.includes('/contact') },
   ];
 
-  return (
-    <header className="sticky top-0 z-30 border-b border-brand-100 bg-white/90 backdrop-blur">
-      <div className="container-app flex items-center justify-between gap-4 py-3 lg:py-4">
-        <div className="flex min-w-0 items-center gap-6">
-          <button
-            type="button"
-            aria-label="Menu"
-            onClick={() => setOpen(true)}
-            className="rounded-full p-2 text-brand-700 hover:bg-brand-50 lg:hidden"
-          >
-            <Menu className="h-5 w-5" />
-          </button>
-          <Link href={`${localePrefix}/`} className="shrink-0">
-            <Logo />
-          </Link>
-          <nav className="hidden items-center gap-1 lg:flex">
-            {navItems.map(({ href, label, match }) => {
-              const active = match(pathname);
-              return (
-                <Link
-                  key={href}
-                  href={href}
-                  className={cn(
-                    'rounded-xl px-3 py-2 text-sm font-medium transition',
-                    active
-                      ? 'bg-brand-50 text-brand-700'
-                      : 'text-brand-800 hover:bg-brand-50 hover:text-brand-700'
-                  )}
-                >
-                  {label}
-                </Link>
-              );
-            })}
-          </nav>
-        </div>
+  useEffect(() => {
+    if (!open) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [open]);
 
-        <div className="flex shrink-0 items-center gap-3">
-          <div className="hidden lg:block">
-            <LanguageSwitcher />
-          </div>
-          {wholesale ? (
-            <div className="flex flex-col items-end leading-tight lg:flex-row lg:items-center lg:gap-2">
-              <div className="flex items-center gap-1 rounded-xl bg-brand-700 px-3 py-1.5 text-white">
-                <Crown className="h-4 w-4" />
-                <div className="text-xs font-semibold">
-                  {t('home.wholesaleBadge')}
-                </div>
-              </div>
-              <span className="mt-0.5 text-[10px] text-brand-700/80 lg:hidden">
-                {t('home.wholesaleBadgeActive')}
-              </span>
-              <button
-                onClick={logoutWholesale}
-                className="text-[10px] text-brand-600 underline lg:text-xs"
-              >
-                {t('home.wholesaleLogout')}
-              </button>
-            </div>
-          ) : (
-            <Link
-              href={`${localePrefix}/wholesale/login`}
-              className="rounded-xl bg-brand-700 px-3 py-2 text-xs font-semibold leading-tight text-white shadow-soft lg:px-4 lg:py-2.5"
-            >
-              <div className="flex items-center gap-1">
-                <Crown className="h-4 w-4" />
-                <span>{t('home.wholesaleBadge')}</span>
-              </div>
-              <span className="mt-0.5 block text-[10px] font-normal text-white/80 lg:hidden">
-                {t('home.wholesaleBadgeSub')}
-              </span>
-            </Link>
-          )}
-        </div>
+  const wholesaleAction = wholesale ? (
+    <div className="flex flex-col items-end leading-tight lg:flex-row lg:items-center lg:gap-2">
+      <div className="flex items-center gap-1 rounded-xl bg-brand-700 px-3 py-1.5 text-white">
+        <Crown className="h-4 w-4" />
+        <div className="text-xs font-semibold">{t('home.wholesaleBadge')}</div>
       </div>
+      <span className="mt-0.5 text-[10px] text-brand-700/80 lg:hidden">
+        {t('home.wholesaleBadgeActive')}
+      </span>
+      <button
+        onClick={logoutWholesale}
+        className="text-[10px] text-brand-600 underline lg:text-xs"
+      >
+        {t('home.wholesaleLogout')}
+      </button>
+    </div>
+  ) : (
+    <Link
+      href={`${localePrefix}/wholesale/login`}
+      className="rounded-xl bg-brand-700 px-3 py-2 text-xs font-semibold leading-tight text-white shadow-soft lg:px-4 lg:py-2.5"
+    >
+      <div className="flex items-center gap-1">
+        <Crown className="h-4 w-4" />
+        <span>{t('home.wholesaleBadge')}</span>
+      </div>
+      <span className="mt-0.5 block text-[10px] font-normal text-white/80 lg:hidden">
+        {t('home.wholesaleBadgeSub')}
+      </span>
+    </Link>
+  );
+
+  return (
+    <>
+      <header className="sticky top-0 z-30 border-b border-brand-100 bg-white/90 backdrop-blur">
+        <div className="container-app py-3 lg:py-4">
+          {/* Mobile: menu | centered logo | wholesale */}
+          <div className="relative flex items-center justify-between lg:hidden">
+            <button
+              type="button"
+              aria-label="Menu"
+              onClick={() => setOpen(true)}
+              className="rounded-full p-2 text-brand-700 hover:bg-brand-50"
+            >
+              <Menu className="h-5 w-5" />
+            </button>
+            <Link
+              href={`${localePrefix}/`}
+              className="absolute left-1/2 -translate-x-1/2"
+            >
+              <Logo />
+            </Link>
+            {wholesaleAction}
+          </div>
+
+          {/* Desktop: logo + nav | language + wholesale */}
+          <div className="hidden items-center justify-between gap-4 lg:flex">
+            <div className="flex items-center gap-6">
+              <Link href={`${localePrefix}/`} className="shrink-0">
+                <Logo />
+              </Link>
+              <nav className="flex items-center gap-1">
+                {navItems.map(({ href, label, match }) => {
+                  const active = match(pathname);
+                  return (
+                    <Link
+                      key={href}
+                      href={href}
+                      className={cn(
+                        'rounded-xl px-3 py-2 text-sm font-medium transition',
+                        active
+                          ? 'bg-brand-50 text-brand-700'
+                          : 'text-brand-800 hover:bg-brand-50 hover:text-brand-700'
+                      )}
+                    >
+                      {label}
+                    </Link>
+                  );
+                })}
+              </nav>
+            </div>
+            <div className="flex shrink-0 items-center gap-3">
+              <LanguageSwitcher />
+              {wholesaleAction}
+            </div>
+          </div>
+        </div>
+      </header>
 
       {open && (
-        <div className="fixed inset-0 z-40 bg-brand-900/40 backdrop-blur-sm lg:hidden">
-          <div className="absolute left-0 top-0 h-full w-72 max-w-[85%] overflow-y-auto bg-white p-5 shadow-2xl">
+        <div className="fixed inset-0 z-50 lg:hidden">
+          <button
+            type="button"
+            aria-label="Close menu"
+            className="absolute inset-0 bg-brand-900/40 backdrop-blur-sm"
+            onClick={() => setOpen(false)}
+          />
+          <div className="relative z-10 flex h-full w-72 max-w-[85%] flex-col overflow-y-auto bg-white p-5 shadow-2xl">
             <div className="mb-6 flex items-center justify-between">
               <Logo />
               <button
@@ -171,14 +199,9 @@ export function Header() {
               <LanguageSwitcher />
             </div>
           </div>
-          <button
-            aria-label="Close"
-            className="absolute inset-0 -z-10 h-full w-full"
-            onClick={() => setOpen(false)}
-          />
         </div>
       )}
-    </header>
+    </>
   );
 }
 

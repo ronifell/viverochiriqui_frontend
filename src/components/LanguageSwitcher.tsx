@@ -1,7 +1,7 @@
 'use client';
 
 import { useLocale } from 'next-intl';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname, useRouter } from '@/i18n/navigation';
 import { locales, type Locale } from '@/i18n/config';
 import { cn } from '@/lib/format';
 
@@ -13,19 +13,12 @@ export function LanguageSwitcher() {
   const switchTo = (next: Locale) => {
     if (next === locale) return;
 
-    const segments = pathname.split('/');
-    if (segments[1] && (locales as readonly string[]).includes(segments[1])) {
-      segments[1] = next;
-    } else {
-      segments.splice(1, 0, next);
-    }
-    let newPath = segments.join('/') || '/';
-    if (next === 'es') {
-      // Default locale: drop prefix
-      newPath = newPath.replace(/^\/es(\/|$)/, '/');
-      if (!newPath.startsWith('/')) newPath = `/${newPath}`;
-    }
-    router.push(newPath);
+    const params = new URLSearchParams(window.location.search);
+    const query = Object.fromEntries(params.entries());
+    const href =
+      Object.keys(query).length > 0 ? { pathname, query } : pathname;
+
+    router.replace(href, { locale: next });
   };
 
   return (
@@ -33,6 +26,7 @@ export function LanguageSwitcher() {
       {locales.map((l) => (
         <button
           key={l}
+          type="button"
           onClick={() => switchTo(l)}
           className={cn(
             'px-3 py-1.5 text-xs font-semibold uppercase tracking-wide transition',
