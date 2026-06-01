@@ -11,6 +11,7 @@ import { api, ApiError } from '@/lib/api';
 import { useAuth } from '@/lib/auth-store';
 import type { Category, Product, StockStatus } from '@/lib/types';
 import { cn } from '@/lib/format';
+import { resolveMediaUrl } from '@/lib/media';
 
 interface Props {
   productId: string | null;
@@ -64,6 +65,8 @@ export function AdminProductForm({ productId }: Props) {
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [pendingFiles, setPendingFiles] = useState<File[]>([]);
+  const [pendingPreviews, setPendingPreviews] = useState<string[]>([]);
   const fileInput = useRef<HTMLInputElement>(null);
 
   const isEdit = !!productId;
@@ -100,6 +103,43 @@ export function AdminProductForm({ productId }: Props) {
     };
   }, [productId, adminToken]);
 
+  useEffect(() => {
+    return () => {
+      pendingPreviews.forEach((url) => URL.revokeObjectURL(url));
+    };
+  }, [pendingPreviews]);
+
+  const attachImages = async (
+    targetProduct: Product,
+    files: File[],
+    altText: string
+  ) => {
+    if (!adminToken || !files.length) return targetProduct;
+
+    const res = await api.upload(adminToken, files);
+    let imageCount = targetProduct.images.length;
+
+    for (const item of res.data) {
+      await api.addProductImage(adminToken, targetProduct.id, {
+        url: item.url,
+        is_video: item.is_video,
+        alt_text: altText,
+        is_primary: imageCount === 0,
+      });
+      imageCount += 1;
+    }
+
+    const refreshed = await api.getProduct(targetProduct.id, adminToken);
+    return refreshed.data;
+  };
+
+  const clearPendingFiles = () => {
+    pendingPreviews.forEach((url) => URL.revokeObjectURL(url));
+    setPendingFiles([]);
+    setPendingPreviews([]);
+    if (fileInput.current) fileInput.current.value = '';
+  };
+
   const update = <K extends keyof FormState>(k: K, v: FormState[K]) =>
     setForm((s) => ({ ...s, [k]: v }));
 
@@ -129,7 +169,15 @@ export function AdminProductForm({ productId }: Props) {
         setProduct(res.data);
       } else {
         const res = await api.createProduct(adminToken, body);
-        router.replace(`${localePrefix}/admin/products/${res.data.id}`);
+        let created = res.data;
+
+        if (pendingFiles.length) {
+          created = await attachImages(created, pendingFiles, form.name_es);
+          clearPendingFiles();
+        }
+
+        setProduct(created);
+        router.replace(`${localePrefix}/admin/products/${created.id}`);
       }
     } catch (e) {
       setError(e instanceof ApiError ? e.message : 'Save failed');
@@ -146,28 +194,39 @@ export function AdminProductForm({ productId }: Props) {
   };
 
   const onFiles = async (files: FileList | null) => {
-    if (!files?.length || !adminToken || !product) return;
+    if (!files?.length || !adminToken) return;
+
+    const arr = Array.from(files);
+
+    if (!product) {
+      pendingPreviews.forEach((url) => URL.revokeObjectURL(url));
+      setPendingFiles(arr);
+      setPendingPreviews(arr.map((file) => URL.createObjectURL(file)));
+      if (fileInput.current) fileInput.current.value = '';
+      return;
+    }
+
     setUploading(true);
     setError(null);
     try {
-      const arr = Array.from(files);
-      const res = await api.upload(adminToken, arr);
-      for (const item of res.data) {
-        await api.addProductImage(adminToken, product.id, {
-          url: item.url,
-          is_video: item.is_video,
-          alt_text: form.name_es,
-          is_primary: product.images.length === 0,
-        });
-      }
-      const refreshed = await api.getProduct(product.id, adminToken);
-      setProduct(refreshed.data);
+      const refreshed = await attachImages(product, arr, form.name_es);
+      setProduct(refreshed);
     } catch (e) {
       setError(e instanceof ApiError ? e.message : 'Upload failed');
     } finally {
       setUploading(false);
       if (fileInput.current) fileInput.current.value = '';
     }
+  };
+
+  const removePendingFile = (index: number) => {
+    setPendingFiles((prev) => prev.filter((_, i) => i !== index));
+    setPendingPreviews((prev) => {
+      const next = [...prev];
+      const [removed] = next.splice(index, 1);
+      if (removed) URL.revokeObjectURL(removed);
+      return next;
+    });
   };
 
   const removeImage = async (imageId: string) => {
@@ -324,91 +383,129 @@ export function AdminProductForm({ productId }: Props) {
         </div>
 
         {/* Images */}
-        {isEdit && product && (
-          <div className="space-y-2 rounded-2xl bg-white p-3 shadow-soft ring-1 ring-brand-100">
-            <div className="flex items-center justify-between">
-              <span className="text-sm font-semibold text-brand-900">
-                {t('fields.images')}
-              </span>
-              <button
-                type="button"
-                onClick={() => fileInput.current?.click()}
-                disabled={uploading}
-                className="btn-outline !py-1.5 !px-3 !text-xs"
-              >
-                <Upload className="h-3.5 w-3.5" />
-                {uploading ? tCommon('loading') : t('fields.uploadImages')}
-              </button>
-              <input
-                ref={fileInput}
-                type="file"
-                multiple
-                accept="image/*,video/*"
-                onChange={(e) => onFiles(e.target.files)}
-                className="hidden"
-              />
-            </div>
-            {product.images.length === 0 ? (
-              <p className="text-xs text-brand-700/60">No images yet.</p>
-            ) : (
-              <div className="grid grid-cols-3 gap-2">
-                {product.images.map((img) => (
-                  <div
-                    key={img.id}
-                    className={cn(
-                      'group relative aspect-square overflow-hidden rounded-xl bg-brand-50 ring-1',
-                      img.is_primary
-                        ? 'ring-brand-600'
-                        : 'ring-brand-100'
-                    )}
-                  >
-                    {img.is_video ? (
-                      <div className="grid h-full place-items-center text-brand-700">
-                        <Video className="h-6 w-6" />
-                      </div>
-                    ) : (
-                      <Image
-                        src={img.url}
-                        alt={img.alt_text || ''}
-                        fill
-                        sizes="120px"
-                        className="object-cover"
-                      />
-                    )}
-                    <div className="absolute inset-x-0 bottom-0 flex items-center justify-between bg-black/50 p-1 opacity-0 transition group-hover:opacity-100">
-                      <button
-                        type="button"
-                        onClick={() => setPrimary(img.id)}
-                        className="rounded-full bg-white/90 p-1 text-brand-700"
-                        aria-label="set primary"
-                      >
-                        <Star
-                          className={cn(
-                            'h-3.5 w-3.5',
-                            img.is_primary && 'fill-current text-brand-700'
-                          )}
-                        />
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => removeImage(img.id)}
-                        className="rounded-full bg-white/90 p-1 text-accent-600"
-                        aria-label="remove"
-                      >
-                        <Trash2 className="h-3.5 w-3.5" />
-                      </button>
-                    </div>
-                    {img.is_primary && (
-                      <span className="absolute left-1 top-1 rounded-full bg-brand-700 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wide text-white">
-                        {t('fields.primary')}
-                      </span>
-                    )}
-                  </div>
-                ))}
-              </div>
-            )}
+        <div className="space-y-2 rounded-2xl bg-white p-3 shadow-soft ring-1 ring-brand-100">
+          <div className="flex items-center justify-between">
+            <span className="text-sm font-semibold text-brand-900">
+              {t('fields.images')}
+            </span>
+            <button
+              type="button"
+              onClick={() => fileInput.current?.click()}
+              disabled={uploading || saving}
+              className="btn-outline !py-1.5 !px-3 !text-xs"
+            >
+              <Upload className="h-3.5 w-3.5" />
+              {uploading ? tCommon('loading') : t('fields.uploadImages')}
+            </button>
+            <input
+              ref={fileInput}
+              type="file"
+              multiple
+              accept="image/*,video/*"
+              onChange={(e) => onFiles(e.target.files)}
+              className="hidden"
+            />
           </div>
-        )}
+
+          {!product && pendingPreviews.length === 0 && (
+            <p className="text-xs text-brand-700/60">
+              {t('fields.imagesCreateHint')}
+            </p>
+          )}
+
+          {pendingPreviews.length > 0 && (
+            <div className="grid grid-cols-3 gap-2">
+              {pendingPreviews.map((preview, index) => (
+                <div
+                  key={preview}
+                  className="group relative aspect-square overflow-hidden rounded-xl bg-brand-50 ring-1 ring-brand-100"
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={preview}
+                    alt=""
+                    className="h-full w-full object-cover"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => removePendingFile(index)}
+                    className="absolute right-1 top-1 rounded-full bg-white/90 p-1 text-accent-600 opacity-0 transition group-hover:opacity-100"
+                    aria-label="remove"
+                  >
+                    <Trash2 className="h-3.5 w-3.5" />
+                  </button>
+                  {!product && (
+                    <span className="absolute left-1 top-1 rounded-full bg-brand-700/90 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wide text-white">
+                      {t('fields.pendingUpload')}
+                    </span>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+
+          {product && product.images.length === 0 && pendingPreviews.length === 0 ? (
+            <p className="text-xs text-brand-700/60">No images yet.</p>
+          ) : null}
+
+          {product && product.images.length > 0 && (
+            <div className="grid grid-cols-3 gap-2">
+              {product.images.map((img) => (
+                <div
+                  key={img.id}
+                  className={cn(
+                    'group relative aspect-square overflow-hidden rounded-xl bg-brand-50 ring-1',
+                    img.is_primary
+                      ? 'ring-brand-600'
+                      : 'ring-brand-100'
+                  )}
+                >
+                  {img.is_video ? (
+                    <div className="grid h-full place-items-center text-brand-700">
+                      <Video className="h-6 w-6" />
+                    </div>
+                  ) : (
+                    <Image
+                      src={resolveMediaUrl(img.url)}
+                      alt={img.alt_text || ''}
+                      fill
+                      sizes="120px"
+                      className="object-cover"
+                    />
+                  )}
+                  <div className="absolute inset-x-0 bottom-0 flex items-center justify-between bg-black/50 p-1 opacity-0 transition group-hover:opacity-100">
+                    <button
+                      type="button"
+                      onClick={() => setPrimary(img.id)}
+                      className="rounded-full bg-white/90 p-1 text-brand-700"
+                      aria-label="set primary"
+                    >
+                      <Star
+                        className={cn(
+                          'h-3.5 w-3.5',
+                          img.is_primary && 'fill-current text-brand-700'
+                        )}
+                      />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => removeImage(img.id)}
+                      className="rounded-full bg-white/90 p-1 text-accent-600"
+                      aria-label="remove"
+                    >
+                      <Trash2 className="h-3.5 w-3.5" />
+                    </button>
+                  </div>
+                  {img.is_primary && (
+                    <span className="absolute left-1 top-1 rounded-full bg-brand-700 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wide text-white">
+                      {t('fields.primary')}
+                    </span>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
 
         {error && (
           <div className="rounded-xl bg-accent-50 p-3 text-xs font-semibold text-accent-700">

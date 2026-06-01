@@ -10,6 +10,7 @@ import { api } from '@/lib/api';
 import { useAuth } from '@/lib/auth-store';
 import { useCart } from '@/lib/cart-store';
 import { cn, formatPrice } from '@/lib/format';
+import { resolveMediaUrl } from '@/lib/media';
 import type { Product } from '@/lib/types';
 
 interface Props {
@@ -93,7 +94,7 @@ export function ProductView({ productId }: Props) {
           <div className="relative aspect-square overflow-hidden rounded-3xl bg-brand-50 lg:aspect-[4/5]">
             {images[activeImg]?.url ? (
               <Image
-                src={images[activeImg].url}
+                src={resolveMediaUrl(images[activeImg].url)}
                 alt={images[activeImg].alt_text || name}
                 fill
                 priority
@@ -115,7 +116,7 @@ export function ProductView({ productId }: Props) {
                   )}
                 >
                   <Image
-                    src={img.url}
+                    src={resolveMediaUrl(img.url)}
                     alt={img.alt_text || name}
                     fill
                     sizes="80px"

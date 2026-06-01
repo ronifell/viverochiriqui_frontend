@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react';
 import { useAuth } from '@/lib/auth-store';
 import { useCart } from '@/lib/cart-store';
 import { cn, formatPrice } from '@/lib/format';
+import { resolveMediaUrl } from '@/lib/media';
 import { useStoreHydrated } from '@/lib/use-store-hydrated';
 import type { Product } from '@/lib/types';
 
@@ -68,7 +69,7 @@ export function ProductCard({ product, variant }: Props) {
         <Link href={detailHref} className="absolute inset-0">
           {primary ? (
             <Image
-              src={primary.url}
+              src={resolveMediaUrl(primary.url)}
               alt={primary.alt_text || name}
               fill
               sizes="(max-width: 768px) 50vw, 240px"

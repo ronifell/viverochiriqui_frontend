@@ -132,6 +132,8 @@
       "is_featured": "Featured",
       "images": "Images",
       "uploadImages": "Upload images / video",
+      "imagesCreateHint": "Select images now — they will upload automatically when you save the product.",
+      "pendingUpload": "Pending",
       "primary": "Primary"
     },
     "stats": {

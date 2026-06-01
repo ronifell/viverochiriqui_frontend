@@ -9,6 +9,7 @@ import { AdminShell } from '@/components/admin/AdminShell';
 import { api } from '@/lib/api';
 import { useAuth } from '@/lib/auth-store';
 import { cn, formatPrice } from '@/lib/format';
+import { resolveMediaUrl } from '@/lib/media';
 import type { Product } from '@/lib/types';
 
 export function AdminProductsView() {
@@ -96,7 +97,7 @@ export function AdminProductsView() {
                   <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-xl bg-brand-50">
                     {primary?.url ? (
                       <Image
-                        src={primary.url}
+                        src={resolveMediaUrl(primary.url)}
                         alt={name}
                         fill
                         sizes="56px"

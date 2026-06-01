@@ -8,6 +8,7 @@ import { PublicShell } from '@/components/PublicShell';
 import { useCart } from '@/lib/cart-store';
 import { useAuth } from '@/lib/auth-store';
 import { formatPrice } from '@/lib/format';
+import { resolveMediaUrl } from '@/lib/media';
 import { buildOrderMessage } from '@/lib/whatsapp';
 import { WhatsAppLink } from '@/components/WhatsAppLink';
 import { useStoreHydrated } from '@/lib/use-store-hydrated';
@@ -113,7 +114,7 @@ export function ListView() {
                   <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-xl bg-brand-50 lg:h-20 lg:w-20">
                     {i.image_url && (
                       <Image
-                        src={i.image_url}
+                        src={resolveMediaUrl(i.image_url)}
                         alt={name}
                         fill
                         sizes="80px"
