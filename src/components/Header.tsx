@@ -27,6 +27,23 @@ export function Header() {
     { href: `${localePrefix}/contact`, label: t('nav.contact'), match: (p: string) => p.includes('/contact') },
   ];
 
+  const extraNavItems = [
+    ...(wholesale
+      ? []
+      : [{
+          href: `${localePrefix}/wholesale/login`,
+          label: t('nav.wholesale'),
+          match: (p: string) => p.includes('/wholesale'),
+        }]),
+    {
+      href: `${localePrefix}/admin`,
+      label: t('nav.admin'),
+      match: (p: string) => p.includes('/admin'),
+    },
+  ];
+
+  const desktopNavItems = [...navItems, ...extraNavItems];
+
   useEffect(() => {
     if (!open) return;
     const prev = document.body.style.overflow;
@@ -96,8 +113,8 @@ export function Header() {
               <Link href={`${localePrefix}/`} className="shrink-0">
                 <Logo />
               </Link>
-              <nav className="flex items-center gap-1">
-                {navItems.map(({ href, label, match }) => {
+              <nav className="flex flex-wrap items-center gap-1">
+                {desktopNavItems.map(({ href, label, match }) => {
                   const active = match(pathname);
                   return (
                     <Link
