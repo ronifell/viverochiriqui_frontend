@@ -88,58 +88,61 @@ export function ProductView({ productId }: Props) {
         {t('common.back')}
       </Link>
 
-      <div className="space-y-4">
-        <div className="relative aspect-square overflow-hidden rounded-3xl bg-brand-50">
-          {images[activeImg]?.url ? (
-            <Image
-              src={images[activeImg].url}
-              alt={images[activeImg].alt_text || name}
-              fill
-              priority
-              sizes="(max-width: 768px) 100vw, 480px"
-              className="object-cover"
-            />
-          ) : null}
-        </div>
-
-        {images.length > 1 && (
-          <div className="no-scrollbar -mx-4 flex gap-2 overflow-x-auto px-4">
-            {images.map((img, i) => (
-              <button
-                key={img.id}
-                onClick={() => setActiveImg(i)}
-                className={cn(
-                  'relative h-16 w-16 shrink-0 overflow-hidden rounded-xl border-2',
-                  i === activeImg ? 'border-brand-600' : 'border-transparent'
-                )}
-              >
-                <Image
-                  src={img.url}
-                  alt={img.alt_text || name}
-                  fill
-                  sizes="64px"
-                  className="object-cover"
-                />
-              </button>
-            ))}
+      <div className="space-y-4 lg:grid lg:grid-cols-2 lg:items-start lg:gap-10 lg:space-y-0">
+        <div className="space-y-4">
+          <div className="relative aspect-square overflow-hidden rounded-3xl bg-brand-50 lg:aspect-[4/5]">
+            {images[activeImg]?.url ? (
+              <Image
+                src={images[activeImg].url}
+                alt={images[activeImg].alt_text || name}
+                fill
+                priority
+                sizes="(max-width: 1024px) 100vw, 50vw"
+                className="object-cover"
+              />
+            ) : null}
           </div>
-        )}
 
-        <div>
-          {product.promotion_text && (
-            <span className="chip mb-2 bg-brand-100 text-brand-800">
-              {product.promotion_text}
-            </span>
-          )}
-          <h1 className="font-display text-2xl font-extrabold text-brand-900">
-            {name}
-          </h1>
-          {product.pot_size && (
-            <div className="text-sm text-brand-700/70">{product.pot_size}</div>
+          {images.length > 1 && (
+            <div className="no-scrollbar -mx-4 flex gap-2 overflow-x-auto px-4 lg:mx-0 lg:px-0">
+              {images.map((img, i) => (
+                <button
+                  key={img.id}
+                  onClick={() => setActiveImg(i)}
+                  className={cn(
+                    'relative h-16 w-16 shrink-0 overflow-hidden rounded-xl border-2 lg:h-20 lg:w-20',
+                    i === activeImg ? 'border-brand-600' : 'border-transparent'
+                  )}
+                >
+                  <Image
+                    src={img.url}
+                    alt={img.alt_text || name}
+                    fill
+                    sizes="80px"
+                    className="object-cover"
+                  />
+                </button>
+              ))}
+            </div>
           )}
         </div>
 
-        <div className="rounded-2xl bg-white p-4 shadow-soft ring-1 ring-brand-100">
+        <div className="space-y-4 lg:sticky lg:top-24">
+          <div>
+            {product.promotion_text && (
+              <span className="chip mb-2 bg-brand-100 text-brand-800">
+                {product.promotion_text}
+              </span>
+            )}
+            <h1 className="font-display text-2xl font-extrabold text-brand-900 lg:text-3xl">
+              {name}
+            </h1>
+            {product.pot_size && (
+              <div className="text-sm text-brand-700/70">{product.pot_size}</div>
+            )}
+          </div>
+
+          <div className="rounded-2xl bg-white p-4 shadow-soft ring-1 ring-brand-100 lg:p-5">
           {isWholesale && product.wholesale_price ? (
             <>
               <div className="text-[10px] font-semibold uppercase tracking-wide text-brand-700">
@@ -174,12 +177,12 @@ export function ProductView({ productId }: Props) {
         </div>
 
         {description && (
-          <p className="text-sm leading-relaxed text-brand-800/80">
+          <p className="text-sm leading-relaxed text-brand-800/80 lg:text-base">
             {description}
           </p>
         )}
 
-        <div className="sticky bottom-20 z-10 flex items-center gap-3 rounded-2xl bg-white p-3 shadow-card ring-1 ring-brand-100">
+        <div className="sticky bottom-20 z-10 flex items-center gap-3 rounded-2xl bg-white p-3 shadow-card ring-1 ring-brand-100 lg:static lg:bottom-auto lg:p-4">
           <div className="flex items-center rounded-full border border-brand-200">
             <button
               onClick={() => setQty(Math.max(1, qty - 1))}
@@ -204,6 +207,7 @@ export function ProductView({ productId }: Props) {
           >
             {t('product.addToList')}
           </button>
+        </div>
         </div>
       </div>
     </PublicShell>

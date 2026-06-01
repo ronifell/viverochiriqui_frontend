@@ -85,7 +85,7 @@ export function HomeView() {
             </p>
           )}
           {loading ? (
-            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+            <div className="product-grid">
               {Array.from({ length: 6 }).map((_, i) => (
                 <div key={i} className="h-72 animate-pulse rounded-2xl bg-brand-50" />
               ))}
@@ -95,7 +95,7 @@ export function HomeView() {
               {t('product.noResults')}
             </div>
           ) : (
-            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+            <div className="product-grid">
               {featured.map((p) => (
                 <ProductCard
                   key={p.id}

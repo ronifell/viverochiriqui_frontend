@@ -7,8 +7,8 @@ export function WholesaleHero() {
   const t = useTranslations('home');
 
   return (
-    <section className="rounded-3xl bg-brand-50 p-4">
-      <div className="flex items-start gap-3">
+    <section className="rounded-3xl bg-brand-50 p-4 lg:p-6">
+      <div className="flex items-start gap-3 lg:items-center lg:gap-4">
         <span className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-brand-700 text-white">
           <Crown className="h-5 w-5" />
         </span>

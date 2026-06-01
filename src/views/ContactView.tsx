@@ -16,13 +16,14 @@ export function ContactView() {
   return (
     <PublicShell>
       <div className="space-y-4">
-        <h1 className="text-lg font-bold text-brand-900">{t('nav.contact')}</h1>
+        <h1 className="text-lg font-bold text-brand-900 lg:text-2xl">{t('nav.contact')}</h1>
 
+        <div className="space-y-4 lg:grid lg:grid-cols-2 lg:gap-4 lg:space-y-0">
         <a
           href={whatsappUrl(t('home.helpDesc'))}
           target="_blank"
           rel="noopener"
-          className="flex items-center gap-3 rounded-2xl bg-whatsapp p-4 text-white shadow-card"
+          className="flex items-center gap-3 rounded-2xl bg-whatsapp p-4 text-white shadow-card lg:col-span-2 lg:p-6"
         >
           <span className="grid h-10 w-10 place-items-center rounded-full bg-white/15">
             <MessageCircle className="h-5 w-5" />
@@ -73,6 +74,8 @@ export function ContactView() {
               David, Chiriquí, Panamá
             </div>
           </div>
+        </div>
+
         </div>
 
         <p className="text-center text-[11px] text-brand-700/60">

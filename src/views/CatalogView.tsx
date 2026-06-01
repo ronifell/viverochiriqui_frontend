@@ -4,7 +4,7 @@ import { useLocale, useTranslations } from 'next-intl';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
 import { PublicShell } from '@/components/PublicShell';
-import { CategoryStrip } from '@/components/CategoryStrip';
+import { CategoryStrip, CategorySidebar } from '@/components/CategoryStrip';
 import { ProductCard } from '@/components/ProductCard';
 import { SearchBar } from '@/components/SearchBar';
 import { useAuth } from '@/lib/auth-store';
@@ -82,65 +82,74 @@ export function CatalogView() {
 
   return (
     <PublicShell>
-      <div className="space-y-4">
-        <SearchBar initialValue={q} />
+      <div className="space-y-4 lg:grid lg:grid-cols-[240px_1fr] lg:items-start lg:gap-8 lg:space-y-0">
+        <aside className="hidden lg:block lg:sticky lg:top-24">
+          <h2 className="mb-3 text-xs font-semibold uppercase tracking-wide text-brand-700/70">
+            {t('nav.categories')}
+          </h2>
+          <CategorySidebar categories={categories} activeSlug={category} />
+        </aside>
 
-        {categories.length > 0 && (
-          <div className="-mt-1">
-            <CategoryStrip categories={categories} activeSlug={category} />
+        <div className="space-y-4">
+          <SearchBar initialValue={q} />
+
+          {categories.length > 0 && (
+            <div className="-mt-1 lg:hidden">
+              <CategoryStrip categories={categories} activeSlug={category} />
+            </div>
+          )}
+
+          <div className="flex items-center justify-between">
+            <h1 className="text-base font-bold text-brand-900 lg:text-xl">{heading}</h1>
+            <select
+              value={sort}
+              onChange={(e) => setQuery({ sort: e.target.value })}
+              className="rounded-full border border-brand-200 bg-white px-3 py-1.5 text-xs font-medium text-brand-800 focus:outline-none lg:text-sm"
+            >
+              {sortOptions.map((s) => (
+                <option key={s} value={s}>
+                  {t(`product.sort.${s}` as 'product.sort.newest')}
+                </option>
+              ))}
+            </select>
           </div>
-        )}
 
-        <div className="flex items-center justify-between">
-          <h1 className="text-base font-bold text-brand-900">{heading}</h1>
-          <select
-            value={sort}
-            onChange={(e) => setQuery({ sort: e.target.value })}
-            className="rounded-full border border-brand-200 bg-white px-3 py-1.5 text-xs font-medium text-brand-800 focus:outline-none"
-          >
-            {sortOptions.map((s) => (
-              <option key={s} value={s}>
-                {t(`product.sort.${s}` as 'product.sort.newest')}
-              </option>
-            ))}
-          </select>
+          {category && (
+            <button
+              onClick={() => setQuery({ category: null })}
+              className={cn(
+                'text-xs font-semibold text-brand-700 underline-offset-2 hover:underline lg:hidden'
+              )}
+            >
+              ← {t('common.back')} / {t('product.all')}
+            </button>
+          )}
+
+          {loading ? (
+            <div className="product-grid">
+              {Array.from({ length: 6 }).map((_, i) => (
+                <div
+                  key={i}
+                  className="h-72 animate-pulse rounded-2xl bg-brand-50"
+                />
+              ))}
+            </div>
+          ) : products.length === 0 ? (
+            <div className="rounded-2xl bg-white p-8 text-center text-sm text-brand-700/70 shadow-soft">
+              {t('product.noResults')}
+            </div>
+          ) : (
+            <div className="product-grid">
+              {products.map((p) => (
+                <ProductCard
+                  key={p.id}
+                  product={p}
+                  variant={isWholesale ? 'wholesale' : 'retail'}
+                />
+              ))}
+            </div>
+          )}
         </div>
-
-        {category && (
-          <button
-            onClick={() => setQuery({ category: null })}
-            className={cn(
-              'text-xs font-semibold text-brand-700 underline-offset-2 hover:underline'
-            )}
-          >
-            ← {t('common.back')} / {t('product.all')}
-          </button>
-        )}
-
-        {loading ? (
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-            {Array.from({ length: 6 }).map((_, i) => (
-              <div
-                key={i}
-                className="h-72 animate-pulse rounded-2xl bg-brand-50"
-              />
-            ))}
-          </div>
-        ) : products.length === 0 ? (
-          <div className="rounded-2xl bg-white p-8 text-center text-sm text-brand-700/70 shadow-soft">
-            {t('product.noResults')}
-          </div>
-        ) : (
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-            {products.map((p) => (
-              <ProductCard
-                key={p.id}
-                product={p}
-                variant={isWholesale ? 'wholesale' : 'retail'}
-              />
-            ))}
-          </div>
-        )}
       </div>
     </PublicShell>
   );
