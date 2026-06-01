@@ -2,13 +2,10 @@
 
 import { MessageCircle } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { whatsappUrl } from '@/lib/whatsapp';
+import { WhatsAppLink } from '@/components/WhatsAppLink';
 
 export function WhatsAppHelpCard() {
   const t = useTranslations('home');
-  const href = whatsappUrl(
-    t('helpDesc') /* Provide a default greeting via the desc */
-  );
 
   return (
     <div className="flex items-center gap-3 rounded-2xl bg-white p-4 shadow-soft ring-1 ring-brand-100">
@@ -21,9 +18,9 @@ export function WhatsAppHelpCard() {
         </div>
         <div className="text-xs text-brand-700/70">{t('helpDesc')}</div>
       </div>
-      <a href={href} target="_blank" rel="noopener" className="btn-whatsapp">
+      <WhatsAppLink message={t('helpDesc')} className="btn-whatsapp">
         {t('helpCta')}
-      </a>
+      </WhatsAppLink>
     </div>
   );
 }

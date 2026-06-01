@@ -1,9 +1,15 @@
 import type { CartItem } from './types';
 import { formatPrice } from './format';
 
-const phone = (
-  process.env.NEXT_PUBLIC_WHATSAPP_PHONE || '50760000000'
-).replace(/\D/g, '');
+const DEFAULT_PHONE = '50760000000';
+const MAX_URL_LENGTH = 2048;
+
+export function getWhatsAppPhone(): string {
+  return (process.env.NEXT_PUBLIC_WHATSAPP_PHONE || DEFAULT_PHONE).replace(
+    /\D/g,
+    ''
+  );
+}
 
 interface BuildOptions {
   locale: 'es' | 'en';
@@ -70,7 +76,50 @@ export const buildOrderMessage = ({
   return parts.join('\n');
 };
 
+function buildWhatsAppUrl(phone: string, message: string): string {
+  const url = new URL('https://api.whatsapp.com/send');
+  url.searchParams.set('phone', phone);
+
+  const trimmedMessage = message.trim();
+  if (trimmedMessage) {
+    url.searchParams.set('text', trimmedMessage);
+  }
+
+  let href = url.toString();
+
+  if (href.length > MAX_URL_LENGTH && trimmedMessage) {
+    let body = trimmedMessage;
+    while (body.length > 0) {
+      url.searchParams.set('text', body);
+      href = url.toString();
+      if (href.length <= MAX_URL_LENGTH) break;
+      body = body.slice(0, Math.max(0, body.length - 40)).trimEnd();
+    }
+
+    if (href.length > MAX_URL_LENGTH) {
+      url.searchParams.delete('text');
+      href = url.toString();
+    }
+  }
+
+  return href;
+}
+
 export const whatsappUrl = (message: string): string => {
-  const encoded = encodeURIComponent(message);
-  return `https://wa.me/${phone}?text=${encoded}`;
+  const phone = getWhatsAppPhone();
+  if (!phone) {
+    return 'https://api.whatsapp.com/';
+  }
+
+  const href = buildWhatsAppUrl(phone, message);
+  if (!href.startsWith('https://')) {
+    return `https://api.whatsapp.com/send?phone=${phone}`;
+  }
+
+  return href;
 };
+
+export function openWhatsApp(message: string): void {
+  const href = whatsappUrl(message);
+  window.open(href, '_blank', 'noopener,noreferrer');
+}

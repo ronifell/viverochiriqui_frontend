@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react';
 import { useAuth } from '@/lib/auth-store';
 import { useCart } from '@/lib/cart-store';
 import { cn, formatPrice } from '@/lib/format';
+import { useStoreHydrated } from '@/lib/use-store-hydrated';
 import type { Product } from '@/lib/types';
 
 interface Props {
@@ -30,13 +31,16 @@ const stockDot: Record<Product['stock_status'], string> = {
 export function ProductCard({ product, variant }: Props) {
   const t = useTranslations();
   const locale = useLocale();
+  const storeHydrated = useStoreHydrated();
   const isWholesaleAuth = useAuth((s) => !!s.wholesaleToken);
-  const isWholesale = variant
-    ? variant === 'wholesale'
-    : isWholesaleAuth && !!product.wholesale_price;
+  const isWholesale = storeHydrated
+    ? variant
+      ? variant === 'wholesale'
+      : isWholesaleAuth && !!product.wholesale_price
+    : variant === 'wholesale';
 
   const cartItem = useCart((s) =>
-    s.items.find((i) => i.product_id === product.id)
+    storeHydrated ? s.items.find((i) => i.product_id === product.id) : undefined
   );
   const add = useCart((s) => s.add);
   const setQty = useCart((s) => s.setQty);

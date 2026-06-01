@@ -4,18 +4,16 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
 import { Home, Grid2x2, ClipboardList, MessageCircle } from 'lucide-react';
-import { useEffect, useState } from 'react';
 import { useCart } from '@/lib/cart-store';
 import { cn } from '@/lib/format';
+import { useStoreHydrated } from '@/lib/use-store-hydrated';
 
 export function BottomNav() {
   const t = useTranslations('nav');
   const locale = useLocale();
   const pathname = usePathname();
   const totalItems = useCart((s) => s.totalItems());
-
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
+  const storeHydrated = useStoreHydrated();
 
   const localePrefix = locale === 'es' ? '' : `/${locale}`;
   const items = [
@@ -38,7 +36,7 @@ export function BottomNav() {
       href: `${localePrefix}/list`,
       label: t('list'),
       icon: ClipboardList,
-      badge: mounted ? totalItems : 0,
+      badge: storeHydrated ? totalItems : 0,
       match: (p: string) => p.includes('/list'),
     },
     {

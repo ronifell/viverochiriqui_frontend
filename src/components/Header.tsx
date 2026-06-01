@@ -7,6 +7,7 @@ import { Crown, LogOut, Menu, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/lib/auth-store';
 import { cn } from '@/lib/format';
+import { useStoreHydrated } from '@/lib/use-store-hydrated';
 import { Logo } from './Logo';
 import { LanguageSwitcher } from './LanguageSwitcher';
 
@@ -14,8 +15,10 @@ export function Header() {
   const t = useTranslations();
   const locale = useLocale();
   const pathname = usePathname();
-  const wholesale = useAuth((s) => !!s.wholesaleToken);
+  const wholesaleToken = useAuth((s) => s.wholesaleToken);
   const logoutWholesale = useAuth((s) => s.logoutWholesale);
+  const storeHydrated = useStoreHydrated();
+  const wholesale = storeHydrated && !!wholesaleToken;
   const [open, setOpen] = useState(false);
 
   const localePrefix = locale === 'es' ? '' : `/${locale}`;

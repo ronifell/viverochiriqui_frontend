@@ -2,7 +2,7 @@
 
 import { Truck } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { whatsappUrl } from '@/lib/whatsapp';
+import { WhatsAppLink } from '@/components/WhatsAppLink';
 
 export function WholesaleShippingCard() {
   const t = useTranslations('home');
@@ -17,14 +17,12 @@ export function WholesaleShippingCard() {
         </div>
         <div className="text-xs text-brand-700/70">{t('shippingDesc')}</div>
       </div>
-      <a
-        href={whatsappUrl(t('shippingDesc'))}
-        target="_blank"
-        rel="noopener"
+      <WhatsAppLink
+        message={t('shippingDesc')}
         className="btn-outline !py-1.5 !px-3 !text-[11px]"
       >
         {t('moreInfo')}
-      </a>
+      </WhatsAppLink>
     </div>
   );
 }

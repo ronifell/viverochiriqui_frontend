@@ -4,12 +4,13 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useLocale, useTranslations } from 'next-intl';
 import { ClipboardList, Crown, Minus, Plus, Trash2 } from 'lucide-react';
-import { useEffect, useState } from 'react';
 import { PublicShell } from '@/components/PublicShell';
 import { useCart } from '@/lib/cart-store';
 import { useAuth } from '@/lib/auth-store';
 import { formatPrice } from '@/lib/format';
-import { buildOrderMessage, whatsappUrl } from '@/lib/whatsapp';
+import { buildOrderMessage } from '@/lib/whatsapp';
+import { WhatsAppLink } from '@/components/WhatsAppLink';
+import { useStoreHydrated } from '@/lib/use-store-hydrated';
 import type { Locale } from '@/i18n/config';
 
 export function ListView() {
@@ -23,14 +24,26 @@ export function ListView() {
   const setQty = useCart((s) => s.setQty);
   const remove = useCart((s) => s.remove);
   const clear = useCart((s) => s.clear);
-  const isWholesale = useAuth((s) => !!s.wholesaleToken);
+  const wholesaleToken = useAuth((s) => s.wholesaleToken);
+  const storeHydrated = useStoreHydrated();
+  const isWholesale = storeHydrated && !!wholesaleToken;
   const totalEstimate = useCart((s) => s.totalEstimate(isWholesale));
   const totalItems = useCart((s) => s.totalItems());
 
-  const [hydrated, setHydrated] = useState(false);
-  useEffect(() => setHydrated(true), []);
+  if (!storeHydrated) {
+    return (
+      <PublicShell>
+        <div className="animate-pulse space-y-4">
+          <div className="h-8 w-40 rounded-xl bg-brand-50" />
+          <div className="h-24 rounded-2xl bg-brand-50" />
+          <div className="h-24 rounded-2xl bg-brand-50" />
+          <div className="h-32 rounded-2xl bg-brand-50" />
+        </div>
+      </PublicShell>
+    );
+  }
 
-  if (hydrated && items.length === 0) {
+  if (items.length === 0) {
     return (
       <PublicShell>
         <div className="mt-12 flex flex-col items-center text-center">
@@ -208,14 +221,12 @@ export function ListView() {
                   {t('list.subtotal')}
                 </div>
               </div>
-              <a
-                href={whatsappUrl(message)}
-                target="_blank"
-                rel="noopener"
+              <WhatsAppLink
+                message={message}
                 className="btn-whatsapp lg:w-full lg:justify-center"
               >
                 {t('list.send')}
-              </a>
+              </WhatsAppLink>
             </div>
           </div>
         </div>

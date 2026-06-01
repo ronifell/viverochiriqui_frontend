@@ -1,4 +1,4 @@
-export const formatPrice = (value: number, locale: string = 'es-PA'): string => {
+export const formatPrice = (value: number, locale: string = 'en-US'): string => {
   if (Number.isNaN(value)) return '$0.00';
   return new Intl.NumberFormat(locale, {
     style: 'currency',
