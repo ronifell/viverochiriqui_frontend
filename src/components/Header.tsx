@@ -122,7 +122,7 @@ export function Header() {
               href={`${localePrefix}/`}
               className="min-w-0 flex-1 overflow-hidden"
             >
-              <Logo className="h-9 max-h-9 w-auto max-w-full origin-left" />
+              <Logo className="h-10 max-h-10 w-auto max-w-full origin-left" />
             </Link>
             {wholesaleMobile}
           </div>

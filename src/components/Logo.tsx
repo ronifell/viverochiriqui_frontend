@@ -15,7 +15,7 @@ export function Logo({ className }: LogoProps) {
       alt="Vivero Chiriquí"
       width={LOGO_WIDTH}
       height={LOGO_HEIGHT}
-      className={cn('h-11 w-auto max-w-full', className)}
+      className={cn('h-12 w-auto max-w-full', className)}
       priority
     />
   );
