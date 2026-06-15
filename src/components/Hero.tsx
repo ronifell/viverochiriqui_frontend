@@ -23,8 +23,8 @@ export function Hero() {
         </div>
         <div className="relative col-span-2 aspect-square lg:col-span-1 lg:aspect-[4/3]">
           <Image
-            src="https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format&fit=crop&w=600&q=70"
-            alt="Plants"
+            src="/flower.PNG"
+            alt="Plantas florales"
             fill
             sizes="(max-width: 1024px) 40vw, 560px"
             className="rounded-2xl object-cover lg:rounded-3xl"

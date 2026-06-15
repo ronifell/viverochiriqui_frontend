@@ -11,13 +11,13 @@ export const metadata: Metadata = {
     template: '%s — Vivero Chiriquí',
   },
   description:
-    'Catálogo digital de Vivero Chiriquí: plantas, macetas y accesorios para tu hogar y jardín. Pide por WhatsApp en segundos.',
+    'Catálogo digital de Vivero Chiriquí: gran variedad de plantas florales, ornamentales y medicinales. Pide por WhatsApp en segundos.',
   applicationName: 'Vivero Chiriquí',
   keywords: ['vivero', 'plantas', 'jardín', 'Chiriquí', 'Panamá', 'WhatsApp'],
   openGraph: {
     title: 'Vivero Chiriquí — Catálogo Digital',
     description:
-      'Plantas que llenan tu vida de naturaleza. Cotiza vía WhatsApp en segundos.',
+      'Felices de cultivar plantas para ustedes. Cotiza vía WhatsApp en segundos.',
     type: 'website',
   },
   icons: {
